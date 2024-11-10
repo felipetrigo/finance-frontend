@@ -32,8 +32,7 @@ class LearningState extends State<LearningDetail>{
                       padding: const EdgeInsets.all(8),
                       child: ElevatedButton(
                         style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all(Colors.green[800])),
+                            backgroundColor: WidgetStateProperty.all(Colors.lightGreen)),
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -45,7 +44,7 @@ class LearningState extends State<LearningDetail>{
                             child: Row(children: [
                               const Icon(Icons.play_arrow, color: Colors.white),
                               Text(it.title,
-                                  style: const TextStyle(fontSize: 22))
+                                  style: const TextStyle(fontSize: 22,color: Colors.white))
                             ])),
                       ))
               ]),

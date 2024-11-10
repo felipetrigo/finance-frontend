@@ -27,10 +27,12 @@ class HomeState extends State<HomeDetail> {
     return Scaffold(
       body: Center(
           child: Column(children: [
-        const Padding(
+        Container(
+            color: Colors.lightGreen,
             padding: EdgeInsets.all(16),
+            alignment: Alignment.center,
             child:
-                Text("GASTOS", softWrap: true, style: TextStyle(fontSize: 20))),
+                const Text("GASTOS", softWrap: true, style: TextStyle(fontSize: 20,color: Colors.white))),
         FutureBuilder<Map<String, double>>(
           future: QueryData.listSpents(),
           builder: (context, snapshot) {
@@ -60,32 +62,32 @@ class HomeState extends State<HomeDetail> {
             padding: const EdgeInsets.all(8),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.green, // Background color
+                  backgroundColor: Colors.green, // Background color
                 ),
                 onPressed: () {
                   showDiag();
                 },
-                child: const Text("Adicionar Gasto"))),
+                child: const Text("Adicionar Gasto", style: TextStyle(color: Colors.white),))),
         Padding(
             padding: const EdgeInsets.all(8),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue, // Background color
+                  backgroundColor: Colors.blue, // Background color
                 ),
                 onPressed: () {
                   updateDiag();
                 },
-                child: const Text("Alterar Gastos"))),
+                child: const Text("Alterar Gastos", style: TextStyle(color: Colors.white),))),
         Padding(
             padding: const EdgeInsets.all(8),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.red, // Background color
+                  backgroundColor: Colors.red, // Background color
                 ),
                 onPressed: () {
                   rmDiag();
                 },
-                child: const Text("Remover Gasto")))
+                child: const Text("Remover Gasto", style: TextStyle(color: Colors.white),)))
         
       ])),
     );
@@ -180,8 +182,9 @@ class HomeState extends State<HomeDetail> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    
                     TextFormField(
-                      decoration: const InputDecoration(hintText: "nome"),
+                      decoration: InputDecoration(hintText: "${s.name}"),
                       onSaved: (value) {
                         client.controllerUpdateMapping(s.id);
                         client.controllerUpdateMapping(value);
@@ -193,9 +196,11 @@ class HomeState extends State<HomeDetail> {
                         return null;
                       },
                     ),
+                    Text("Novo nome da despesa"),
+                    
                     TextFormField(
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(hintText: "preco"),
+                      decoration: InputDecoration(hintText: "${s.price}"),
                       onSaved: (value) {
                         client.controllerUpdateMapping(s.percentage);
                         client.controllerUpdateMapping(double.parse(value!));
@@ -207,6 +212,7 @@ class HomeState extends State<HomeDetail> {
                         return null;
                       },
                     ),
+                    Text("Novo valor da despesa"),
                   ],
                 ),
               ),

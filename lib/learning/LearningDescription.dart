@@ -13,9 +13,11 @@ class LearningDescription extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.green[800],
         title: Column(children: [Text(it.title,style: const TextStyle(
-            fontSize: 34
+            fontSize: 34,
+            color: Colors.white
         ),softWrap: true), Text("Por ${it.author}",style: const TextStyle(
-            fontSize: 12
+            fontSize: 12,
+            color: Colors.white
         ), softWrap: true)]),
         centerTitle: true,
       ),

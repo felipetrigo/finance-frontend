@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +9,13 @@ import '../domain/Spent.dart';
 import '../domain/customer.dart';
 
 class QueryData<T>{
+  static const httpBase = "http://";
+  static const basepath = "ec2-15-228-145-9.sa-east-1.compute.amazonaws.com:8080"; 
   List<T> list = [];
   List<T> listObjectUpdate = [];
   static Future<Map<String, double>> listSpents() async {
     List response = jsonDecode(utf8.decode(await http
-        .get(Uri.parse("http://localhost:8080/v1/spent/list"))
+        .get(Uri.parse("$httpBase$basepath/finance-solution/v1/spent/list"))
         .then((value) => value.bodyBytes)));
     List<MapEntry<String,double>> list = [];
     double total = 0;
@@ -29,7 +32,7 @@ class QueryData<T>{
   }
   static Future<customer> customerGet() async {
     Map<String,dynamic> response = jsonDecode(await http
-        .get(Uri.parse("http://localhost:8080/v1/customer/get"))
+        .get(Uri.parse("$httpBase$basepath/finance-solution/v1/customer/get"))
         .then((value) => value.body));
     return customer.fromJSON(response);
   }
@@ -40,12 +43,13 @@ class QueryData<T>{
     listObjectUpdate.add(obj);
   }
   static void deleteSpents(context,int id) {
-    final uri = Uri.parse("http://localhost:8080/v1/spent/delete?id=$id");
+    final uri = Uri.parse("$httpBase$basepath/finance-solution/v1/spent/delete?id=$id");
     http.delete(uri);
+    sleep(Durations.medium2);
     Navigator.of(context).pop();
   }
   void updateSpents() {
-    final uri = Uri.parse("http://localhost:8080/v1/spent/update");
+    final uri = Uri.parse("$httpBase$basepath/finance-solution/v1/spent/update");
     final response = http.put(uri,headers: {"Content-type": "application/json; charset=utf-8"},
         body:jsonEncode({'id':listObjectUpdate[0] as int,
         'price': listObjectUpdate[3] as double,
@@ -58,7 +62,7 @@ class QueryData<T>{
   Future<Map<String, dynamic>> putSpent() async {
     final queryParameter = {'id': '1'};
     final uri =
-    Uri.http("localhost:8080", "/v1/customer/add/spent", queryParameter);
+    Uri.http("$basepath", "/finance-solution/v1/customer/add/spent", queryParameter);
     double valor = list[1] is String ? double.parse(list[1]as String):list[1] as double;
 
     final response = jsonDecode(await http
@@ -75,7 +79,7 @@ class QueryData<T>{
 
   static Future<List<Spent>> listarSpents() async {
     List response = jsonDecode(utf8.decode(await http
-        .get(Uri.parse("http://localhost:8080/v1/spent/list"))
+        .get(Uri.parse("$httpBase$basepath/finance-solution/v1/spent/list"))
         .then((value) => value.bodyBytes)));
     List<Spent> list = response.map((e) => Spent.fromJson(e)).toList();
     return list;
