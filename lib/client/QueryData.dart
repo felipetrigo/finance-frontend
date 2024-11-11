@@ -10,7 +10,7 @@ import '../domain/customer.dart';
 
 class QueryData<T>{
   static const httpBase = "http://";
-  static const basepath = "ec2-52-67-5-209.sa-east-1.compute.amazonaws.com:8080"; 
+  static const basepath = "52.67.5.209:8080"; 
   List<T> list = [];
   List<T> listObjectUpdate = [];
   static Future<Map<String, double>> listSpents() async {
