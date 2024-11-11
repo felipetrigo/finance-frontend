@@ -22,17 +22,20 @@ class HomeState extends State<HomeDetail> {
 
   QueryData client = QueryData();
   final _formKey = GlobalKey<FormState>();
+  Color background = const Color.fromARGB(255, 110, 110, 110);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: background,
       body: Center(
           child: Column(children: [
         Container(
             color: Colors.lightGreen,
             padding: EdgeInsets.all(16),
             alignment: Alignment.center,
-            child:
-                const Text("GASTOS", softWrap: true, style: TextStyle(fontSize: 20,color: Colors.white))),
+            child: const Text("GASTOS",
+                softWrap: true,
+                style: TextStyle(fontSize: 20, color: Colors.white))),
         FutureBuilder<Map<String, double>>(
           future: QueryData.listSpents(),
           builder: (context, snapshot) {
@@ -47,9 +50,10 @@ class HomeState extends State<HomeDetail> {
                     chartValueStyle: defaultChartValueStyle.copyWith(
                       color: Colors.black,
                       fontSize: 12,
-                )),
-                legendOptions:
-                    const LegendOptions(legendPosition: LegendPosition.bottom),
+                    )),
+                legendOptions: const LegendOptions(
+                    legendTextStyle: TextStyle(color: Colors.white),
+                    legendPosition: LegendPosition.bottom),
               ));
             } else {
               return Container(
@@ -65,9 +69,12 @@ class HomeState extends State<HomeDetail> {
                   backgroundColor: Colors.green, // Background color
                 ),
                 onPressed: () {
-                  showDiag();
+                  showDiag(background);
                 },
-                child: const Text("Adicionar Gasto", style: TextStyle(color: Colors.white),))),
+                child: const Text(
+                  "Adicionar Gasto",
+                  style: TextStyle(color: Colors.white),
+                ))),
         Padding(
             padding: const EdgeInsets.all(8),
             child: ElevatedButton(
@@ -75,9 +82,12 @@ class HomeState extends State<HomeDetail> {
                   backgroundColor: Colors.blue, // Background color
                 ),
                 onPressed: () {
-                  updateDiag();
+                  updateDiag(background);
                 },
-                child: const Text("Alterar Gastos", style: TextStyle(color: Colors.white),))),
+                child: const Text(
+                  "Alterar Gastos",
+                  style: TextStyle(color: Colors.white),
+                ))),
         Padding(
             padding: const EdgeInsets.all(8),
             child: ElevatedButton(
@@ -85,21 +95,28 @@ class HomeState extends State<HomeDetail> {
                   backgroundColor: Colors.red, // Background color
                 ),
                 onPressed: () {
-                  rmDiag();
+                  rmDiag(background);
                 },
-                child: const Text("Remover Gasto", style: TextStyle(color: Colors.white),)))
-        
+                child: const Text(
+                  "Remover Gasto",
+                  style: TextStyle(color: Colors.white),
+                )))
       ])),
     );
   }
 
-  Widget buildRemovable(Spent s) {
+  Widget buildRemovable(Color background, Spent s) {
     return Container(
+        color: background,
         padding: EdgeInsets.all(16),
         alignment: Alignment.center,
         child: Row(
           children: [
-            Expanded(child: Text(s.name)),
+            Expanded(
+                child: Text(
+              s.name,
+              style: TextStyle(color: Colors.white),
+            )),
             Expanded(
                 child: InkWell(
                     onTap: () {
@@ -111,34 +128,38 @@ class HomeState extends State<HomeDetail> {
           ],
         ));
   }
-  Widget buildUpdatableSpent(Spent s){
-    return Container(padding: EdgeInsets.all(16),
+
+  Widget buildUpdatableSpent(Spent s) {
+    return Container(
+        padding: EdgeInsets.all(16),
         alignment: Alignment.center,
         child: Row(
           children: [
-            Expanded(child: Text(s.name)),
+            Expanded(child: Text(s.name,style: TextStyle(color: Colors.white),)),
             Expanded(
                 child: InkWell(
                     onTap: () {
                       setState(() {
-                        formupdateDiag(s);
+                        formupdateDiag(background, s);
                       });
                     },
-                    child: Icon(Icons.create_rounded, color: Colors.black)))
+                    child: Icon(Icons.create_rounded, color: Colors.white)))
           ],
         ));
   }
-  Future updateDiag() {
+
+  Future updateDiag(Color background) {
     return showDialog(
         context: context,
         builder: (context) => Dialog(
-                child: Center(
+            backgroundColor: background,
+            child: Center(
               child: Column(children: [
                 const Expanded(
                     child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Text("ALTERAR DESPESAS",
-                            softWrap: true, style: TextStyle(fontSize: 20)))),
+                            softWrap: true, style: TextStyle(fontSize: 20,color: Colors.white)))),
                 Expanded(
                     child: Container(
                         alignment: Alignment.center,
@@ -161,30 +182,36 @@ class HomeState extends State<HomeDetail> {
                             }
                           },
                         ))),
-                Expanded(
+                Container(
+                  padding: EdgeInsets.all(20),
                   child: TextButton(
+                    style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.white)),
                       onPressed: cancel, child: const Text("VOLTAR")),
                 )
               ]),
             )));
   }
-    Future formupdateDiag(Spent s) {
+
+  Future formupdateDiag(Color background, Spent s) {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
+              backgroundColor: background,
               title: const Text(
                 "ALTERAR DESPESA",
                 softWrap: true,
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 20, color: Colors.white),
               ),
               content: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    
                     TextFormField(
-                      decoration: InputDecoration(hintText: "${s.name}"),
+                      decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Colors.white),
+                          hintText: "${s.name}"),
                       onSaved: (value) {
                         client.controllerUpdateMapping(s.id);
                         client.controllerUpdateMapping(value);
@@ -196,11 +223,15 @@ class HomeState extends State<HomeDetail> {
                         return null;
                       },
                     ),
-                    Text("Novo nome da despesa"),
-                    
+                    Text(
+                      "Novo nome da despesa",
+                      style: TextStyle(color: Colors.white),
+                    ),
                     TextFormField(
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(hintText: "${s.price}"),
+                      decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Colors.white),
+                          hintText: "${s.price}"),
                       onSaved: (value) {
                         client.controllerUpdateMapping(s.percentage);
                         client.controllerUpdateMapping(double.parse(value!));
@@ -212,27 +243,42 @@ class HomeState extends State<HomeDetail> {
                         return null;
                       },
                     ),
-                    Text("Novo valor da despesa"),
+                    Text(
+                      "Novo valor da despesa",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ],
                 ),
               ),
               actions: [
-                TextButton(onPressed: cancel, child: const Text("VOLTAR")),
-                TextButton(onPressed: submitUpdate, child: const Text("ENVIAR"))
+                TextButton(
+                    style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.white)),
+                    onPressed: cancel,
+                    child: const Text("VOLTAR")),
+                TextButton(
+                    style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.white)),
+                    onPressed: submitUpdate,
+                    child: const Text("ENVIAR"))
               ],
             ));
   }
-  Future rmDiag() {
+
+  Future rmDiag(Color background) {
     return showDialog(
         context: context,
         builder: (context) => Dialog(
-                child: Center(
+            backgroundColor: background,
+            child: Center(
               child: Column(children: [
                 const Expanded(
                     child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Text("REMOVER DESPESAS",
-                            softWrap: true, style: TextStyle(fontSize: 20)))),
+                            softWrap: true,
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white)))),
                 Expanded(
                     child: Container(
                         alignment: Alignment.center,
@@ -246,7 +292,7 @@ class HomeState extends State<HomeDetail> {
                                   itemCount: snapshot.requireData.length,
                                   itemBuilder: (context, index) {
                                     Spent s = snapshot.requireData[index];
-                                    return buildRemovable(s);
+                                    return buildRemovable(background, s);
                                   });
                             } else {
                               return Container(
@@ -255,22 +301,27 @@ class HomeState extends State<HomeDetail> {
                             }
                           },
                         ))),
-                Expanded(
-                  child: TextButton(
-                      onPressed: cancel, child: const Text("VOLTAR")),
-                )
+                Container(
+                    padding: EdgeInsets.all(20),
+                    child: TextButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                WidgetStatePropertyAll(Colors.white)),
+                        onPressed: cancel,
+                        child: const Text("VOLTAR")))
               ]),
             )));
   }
 
-  Future showDiag() {
+  Future showDiag(Color background) {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
+              backgroundColor: background,
               title: const Text(
                 "CADASTRAR DESPESAS",
                 softWrap: true,
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 20, color: Colors.white),
               ),
               content: Form(
                 key: _formKey,
@@ -278,7 +329,12 @@ class HomeState extends State<HomeDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
-                      decoration: const InputDecoration(hintText: "Nome"),
+                      cursorColor: Colors.white,
+                      decoration: const InputDecoration(
+                          counterStyle: TextStyle(color: Colors.white),
+                          hintText: "Nome",
+                          hintStyle: TextStyle(color: Colors.white),
+                          helperStyle: TextStyle(color: Colors.white)),
                       onSaved: (value) {
                         client.controllerMapping(value);
                       },
@@ -290,10 +346,17 @@ class HomeState extends State<HomeDetail> {
                       },
                     ),
                     TextFormField(
+                      cursorColor: Colors.white,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(hintText: "Valor"),
+                      decoration: const InputDecoration(
+                          counterStyle: TextStyle(color: Colors.white),
+                          hintText: "Valor",
+                          hintStyle: TextStyle(color: Colors.white),
+                          fillColor: Colors.white,
+                          helperStyle: TextStyle(color: Colors.white)),
                       onSaved: (value) {
-                        client.controllerMapping(double.parse(value!.replaceAll(",", ".")));
+                        client.controllerMapping(
+                            double.parse(value!.replaceAll(",", ".")));
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -306,8 +369,16 @@ class HomeState extends State<HomeDetail> {
                 ),
               ),
               actions: [
-                TextButton(onPressed: cancel, child: const Text("VOLTAR")),
-                TextButton(onPressed: submit, child: const Text("ENVIAR"))
+                TextButton(
+                    style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.white)),
+                    onPressed: cancel,
+                    child: const Text("VOLTAR")),
+                TextButton(
+                    style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.white)),
+                    onPressed: submit,
+                    child: const Text("ENVIAR"))
               ],
             ));
   }
@@ -315,6 +386,7 @@ class HomeState extends State<HomeDetail> {
   void cancel() {
     Navigator.of(context).pop();
   }
+
   void submit() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
@@ -322,6 +394,7 @@ class HomeState extends State<HomeDetail> {
       client.putSpent();
     }
   }
+
   void submitUpdate() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();

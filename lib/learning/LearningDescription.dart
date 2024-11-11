@@ -5,13 +5,15 @@ import 'Learning.dart';
 
 
 class LearningDescription extends StatelessWidget {
-  const LearningDescription(this.it, {super.key});
+  LearningDescription(this.backgroundColor ,this.it, {super.key});
   final Learning it;
+  Color backgroundColor;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.green[800],
+        backgroundColor: Colors.lightGreen,
         title: Column(children: [Text(it.title,style: const TextStyle(
             fontSize: 34,
             color: Colors.white
@@ -23,7 +25,7 @@ class LearningDescription extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          children: [Padding(padding: EdgeInsets.all(8), child: Text(it.text))],
+          children: [Padding(padding: EdgeInsets.all(8), child: Text(it.text,style: TextStyle(color: Colors.white),))],
         ),
       ),
     );

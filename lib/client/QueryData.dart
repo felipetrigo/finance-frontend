@@ -10,7 +10,7 @@ import '../domain/customer.dart';
 
 class QueryData<T>{
   static const httpBase = "http://";
-  static const basepath = "ec2-15-228-145-9.sa-east-1.compute.amazonaws.com:8080"; 
+  static const basepath = "ec2-52-67-5-209.sa-east-1.compute.amazonaws.com:8080"; 
   List<T> list = [];
   List<T> listObjectUpdate = [];
   static Future<Map<String, double>> listSpents() async {
@@ -45,7 +45,6 @@ class QueryData<T>{
   static void deleteSpents(context,int id) {
     final uri = Uri.parse("$httpBase$basepath/finance-solution/v1/spent/delete?id=$id");
     http.delete(uri);
-    sleep(Durations.medium2);
     Navigator.of(context).pop();
   }
   void updateSpents() {

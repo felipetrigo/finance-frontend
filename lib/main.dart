@@ -17,19 +17,22 @@ class NavigationBarApp extends StatelessWidget {
 }
 
 class Router extends StatelessWidget {
+
+  Color backGround = Color.fromARGB(255, 110, 110, 110);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+          backgroundColor: backGround,
       body: Center(
           child: Column(children: [
         Expanded(child: Container(
             padding: const EdgeInsets.all(16),
-            child: const Text("BEM VINDO", style: TextStyle(fontSize: 20)))),
+            child: const Text("BEM VINDO", style: TextStyle(fontSize: 20, color: Colors.white)))),
         Expanded(child: Container(
           alignment: Alignment.topCenter,
           child: ElevatedButton(
-            onPressed: () => entrar(context),
+            onPressed: () => entrar(context,backGround),
             child: const Text("ENTRAR", style: TextStyle(fontSize: 20)),
           ),
         ),)
@@ -37,26 +40,28 @@ class Router extends StatelessWidget {
     ));
   }
 
-  void entrar(BuildContext context) {
+  void entrar(BuildContext context, Color background) {
     Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const NavigationExample()));
+        MaterialPageRoute(builder: (context) => NavigationExample(background: background,)));
   }
 }
 
 class NavigationExample extends StatefulWidget {
-  const NavigationExample({super.key});
-
+  NavigationExample({super.key, required this.background});
+  Color background;
   @override
-  State<NavigationExample> createState() => _NavigationExampleState();
+  State<NavigationExample> createState() => _NavigationExampleState(background: this.background);
 }
 
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 1;
-
+  Color background;
+  _NavigationExampleState({required this.background});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
+        backgroundColor: background,
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
@@ -66,25 +71,25 @@ class _NavigationExampleState extends State<NavigationExample> {
         destinations: const <Widget>[
           NavigationDestination(
             selectedIcon: Icon(Icons.account_circle),
-            icon: Icon(Icons.account_circle_outlined),
+            icon: Icon(Icons.account_circle_outlined, color: Colors.white),
             label: 'Conta',
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
+            icon: Icon(Icons.home_outlined, color: Colors.white,),
             label: 'Casa',
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.school),
-            icon: Icon(Icons.school_outlined),
+            icon: Icon(Icons.school_outlined, color: Colors.white),
             label: 'Aprender',
           ),
         ],
       ),
       body: <Widget>[
-        AccountDetail(),
-        HomeDetail(),
-        LearningDetail(),
+        AccountDetail(background:this.background),
+        HomeDetail(background: this.background),
+        LearningDetail(background: this.background),
       ][currentPageIndex],
     );
   }
